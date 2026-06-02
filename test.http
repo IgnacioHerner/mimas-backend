@@ -431,3 +431,20 @@ Authorization: Bearer {{tokenLopez}}
   "frecuencia": "TRIMESTRAL",
   "proximaDosis": "2026-09-02"
 }
+
+### Crear medicación
+POST http://localhost:8080/api/medications
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "nombre": "Meloxicam",
+  "dosisCantidad": "0.5",
+  "dosisUnidad": "ML",
+  "viaAdministracion": "ORAL",
+  "fechaInicio": "2026-06-02",
+  "horaInicio": "08:00",
+  "tipoRecurrencia": "DIARIA",
+  "notas": "Por 7 días, control el viernes"
+}

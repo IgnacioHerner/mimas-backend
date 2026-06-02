@@ -140,3 +140,45 @@ data class DewormingResponse(
     val proximaDosis: String? = null,
     val notas: String? = null
 )
+
+@Serializable
+data class CreateMedicationRequest(
+    val petCode: String,
+    val nombre: String,
+    val dosisCantidad: String,
+    val dosisUnidad: String,
+    val viaAdministracion: String,
+    val fechaInicio: String,
+    val horaInicio: String? = null,
+    val tipoRecurrencia: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class UpdateMedicationRequest(
+    val nombre: String? = null,
+    val dosisCantidad: String? = null,
+    val dosisUnidad: String? = null,
+    val viaAdministracion: String? = null,
+    val fechaInicio: String? = null,
+    val horaInicio: String? = null,
+    val tipoRecurrencia: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class MedicationResponse(
+    val id: Int,
+    val petId: Int,
+    val petCode: String,
+    val veterinarianId: Int,
+    val veterinarianName: String,
+    val nombre: String,
+    val dosisCantidad: String,
+    val dosisUnidad: String,
+    val viaAdministracion: String,
+    val fechaInicio: String,
+    val horaInicio: String? = null,
+    val tipoRecurrencia: String? = null,
+    val notas: String? = null
+)

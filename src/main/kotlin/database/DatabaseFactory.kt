@@ -1,6 +1,7 @@
 package com.ignaherner.database
 
 import com.ignaherner.models.tables.Dewormings
+import com.ignaherner.models.tables.Medications
 import com.ignaherner.models.tables.PetOwners
 import com.ignaherner.models.tables.Pets
 import com.ignaherner.models.tables.Vaccines
@@ -17,7 +18,7 @@ object DatabaseFactory {
         Database.connect(createHikariDataSource(url, driver, user, password))
 
         transaction {
-            SchemaUtils.create(Veterinarians, Pets, PetOwners, Vaccines, Dewormings)
+            SchemaUtils.create(Veterinarians, Pets, PetOwners, Vaccines, Dewormings, Medications)
         }
     }
 
