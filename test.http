@@ -448,3 +448,17 @@ Authorization: Bearer {{tokenLopez}}
   "tipoRecurrencia": "DIARIA",
   "notas": "Por 7 días, control el viernes"
 }
+
+### Crear condición
+POST http://localhost:8080/api/conditions
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "nombre": "Dermatitis atópica",
+  "fechaDiagnostico": "2026-06-02",
+  "severidad": "MODERADA",
+  "estado": "EN_TRATAMIENTO",
+  "notas": "Aplicar shampoo medicado 2 veces por semana"
+}

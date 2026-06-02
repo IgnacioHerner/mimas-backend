@@ -182,3 +182,36 @@ data class MedicationResponse(
     val tipoRecurrencia: String? = null,
     val notas: String? = null
 )
+
+@Serializable
+data class CreateConditionRequest(
+    val petCode: String,
+    val nombre: String,
+    val fechaDiagnostico: String,
+    val severidad: String,
+    val estado: String,
+    val notas: String? = null
+)
+
+@Serializable
+data class UpdateConditionRequest(
+    val nombre: String? = null,
+    val fechaDiagnostico: String? = null,
+    val severidad: String? = null,
+    val estado: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class ConditionResponse(
+    val id: Int,
+    val petId: Int,
+    val petCode: String,
+    val veterinarianId: Int,
+    val veterinarianName: String,
+    val nombre: String,
+    val fechaDiagnostico: String,
+    val severidad: String,
+    val estado: String,
+    val notas: String? = null
+)

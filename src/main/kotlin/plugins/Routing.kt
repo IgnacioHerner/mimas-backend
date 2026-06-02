@@ -2,6 +2,7 @@ package com.ignaherner.plugins
 
 import com.ignaherner.models.dto.HealthResponde
 import com.ignaherner.routes.authRoutes
+import com.ignaherner.routes.conditionRoutes
 import com.ignaherner.routes.dewormingRoutes
 import com.ignaherner.routes.medicationRoutes
 import com.ignaherner.routes.petRoutes
@@ -35,5 +36,6 @@ fun Application.configureRouting() {
         vaccineRoutes()
         dewormingRoutes()
         medicationRoutes()
+        conditionRoutes()
     }
 }
