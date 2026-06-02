@@ -1,3 +1,34 @@
+### -------------------------------------------------------------------
+### Variables y login automático
+### -------------------------------------------------------------------
+
+### Login Lopez (guarda el token en variable)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "mipassword"
+}
+
+> {%
+    client.global.set("tokenLopez", response.body.token);
+%}
+
+### Login Perez (guarda el token en variable)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "perez@vet.com",
+  "password": "miclave123"
+}
+
+> {%
+    client.global.set("tokenPerez", response.body.token);
+%}
+
+
 ### Registrar un veterinario
 POST http://localhost:8080/api/veterinarians/register
 Content-Type: application/json
@@ -238,3 +269,151 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hc
 ### Borrar mascota inexistente
 DELETE http://localhost:8080/api/pets/XXX-0000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+### Crear vacuna
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "ANTIRRABICA",
+  "nombreComercial": "Defensor 1",
+  "fechaAplicacion": "2026-06-01",
+  "tipoRecurrencia": "ANUAL",
+  "proximaDosis": "2027-06-01",
+  "notas": "Aplicada en consultorio. Sin reacciones."
+}
+
+### Listar vacunas de Firulais
+GET http://localhost:8080/api/vaccines/pet/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+### Borrar vacuna duplicada 1
+DELETE http://localhost:8080/api/vaccines/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+### Borrar vacuna duplicada 2
+DELETE http://localhost:8080/api/vaccines/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+### Verificar que solo queda la vacuna 3
+GET http://localhost:8080/api/vaccines/pet/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+### Crear segundo veterinario
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "perez@vet.com",
+  "password": "miclave123",
+  "firstName": "Roberto",
+  "lastName": "Pérez",
+  "licenseNumber": "MP-7890"
+}
+
+### Login Pérez
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "perez@vet.com",
+  "password": "miclave123"
+}
+
+### Pérez intenta editar la vacuna de López (debería fallar)
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjEwLCJlbWFpbCI6InBlcmV6QHZldC5jb20iLCJleHAiOjE3ODA0MDgxMjN9.zNBhM-Amm6Q1KKK_MT-q9vZlzqG_OktlJbr5cKJt7_8
+
+{
+  "notas": "Esto no debería poder cambiarlo"
+}
+
+### López edita su propia vacuna (debería funcionar)
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+{
+  "notas": "Aplicada en consultorio. Sin reacciones. Refuerzo en 1 año.",
+  "nombreComercial": "Defensor 3"
+}
+
+### Crear vacuna con fecha mal formada
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjEwLCJlbWFpbCI6InBlcmV6QHZldC5jb20iLCJleHAiOjE3ODA0MDgxMjN9.zNBhM-Amm6Q1KKK_MT-q9vZlzqG_OktlJbr5cKJt7_8
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "TRIPLE_FELINA",
+  "fechaAplicacion": "01-06-2026"
+}
+
+### Crear vacuna en mascota inexistente
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjEwLCJlbWFpbCI6InBlcmV6QHZldC5jb20iLCJleHAiOjE3ODA0MDgxMjN9.zNBhM-Amm6Q1KKK_MT-q9vZlzqG_OktlJbr5cKJt7_8
+
+{
+  "petCode": "XXX-0000",
+  "tipoVacuna": "QUINTUPLE",
+  "fechaAplicacion": "2026-06-01"
+}
+
+### Restaurar campos rotos
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+
+{
+  "tipoRecurrencia": "ANUAL",
+  "proximaDosis": "2027-06-01"
+}
+
+### Ahora probá editar solo notas (los otros campos NO deberían borrarse)
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+
+{
+  "notas": "Test del bug fix"
+}
+
+### Restaurar TODOS los campos
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+
+{
+  "nombreComercial": "Defensor 3",
+  "tipoRecurrencia": "ANUAL",
+  "proximaDosis": "2027-06-01",
+  "notas": "Aplicada en consultorio"
+}
+
+### Solo cambiar notas — los otros deberían persistir
+PATCH http://localhost:8080/api/vaccines/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDQwNzc2MH0.SOiZaKnK8o6oxxXmNKvFSnnP-JrzPSUPRBr5Jn1DEVI
+
+
+{
+  "notas": "Test bug fix confirmado"
+}
+
+### Crear vacuna usando variable
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "TRIPLE_FELINA",
+  "fechaAplicacion": "2026-06-02"
+}

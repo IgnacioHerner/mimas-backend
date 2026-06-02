@@ -60,25 +60,6 @@ data class PetOwnerResponse(
     val ownerEmail: String? = null
 )
 
-@Serializable
-data class CreateVisitRequest(
-    val petCode: String,
-    val date: String,
-    val type: String,
-    val notes: String? = null
-)
-
-@Serializable
-data class VisitResponse(
-    val id: Int,
-    val petId: Int,
-    val petName: String,
-    val veterinarianId: Int,
-    val veterinarianName: String,
-    val date: String,
-    val type: String,
-    val notes: String? = null
-)
 
 @Serializable
 data class UpdatePetRequest(
@@ -86,4 +67,40 @@ data class UpdatePetRequest(
     val species: String? = null,
     val breed: String? = null,
     val birthDate: String? = null
+)
+
+@Serializable
+data class CreateVaccineRequest(
+    val petCode: String,
+    val tipoVacuna: String,
+    val nombreComercial: String? = null,
+    val fechaAplicacion: String,
+    val tipoRecurrencia: String? = null,
+    val proximaDosis: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class UpdateVaccineRequest(
+    val tipoVacuna: String? = null,
+    val nombreComercial: String? = null,
+    val fechaAplicacion: String? = null,
+    val tipoRecurrencia: String? = null,
+    val proximaDosis: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class VaccineResponse(
+    val id: Int,
+    val petId: Int,
+    val petCode: String,
+    val veterinarianId: Int,
+    val veterinarianName: String,
+    val tipoVacuna: String,
+    val nombreComercial: String? = null,
+    val fechaAplicacion: String,
+    val tipoRecurrencia: String? = null,
+    val proximaDosis: String? = null,
+    val notas: String? = null
 )

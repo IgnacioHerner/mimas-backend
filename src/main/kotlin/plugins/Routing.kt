@@ -3,8 +3,8 @@ package com.ignaherner.plugins
 import com.ignaherner.models.dto.HealthResponde
 import com.ignaherner.routes.authRoutes
 import com.ignaherner.routes.petRoutes
+import com.ignaherner.routes.vaccineRoutes
 import com.ignaherner.routes.veterinarianRoutes
-import com.ignaherner.routes.visitRoutes
 import com.ignaherner.services.JwtService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -30,6 +30,6 @@ fun Application.configureRouting() {
         authRoutes(jwtService)
         veterinarianRoutes()
         petRoutes()
-        visitRoutes()
+        vaccineRoutes()
     }
 }
