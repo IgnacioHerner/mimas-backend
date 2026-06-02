@@ -1,0 +1,240 @@
+### Registrar un veterinario
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "garcia@vet.com",
+  "password": "123456",
+  "firstName": "Carlos",
+  "lastName": "García",
+  "licenceNumber": "MP-1234"
+}
+
+### Listar veterinarios
+GET http://localhost:8080/api/veterinarians
+
+### Registrar otro veterinario
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "mipassword",
+  "firstName": "Ana",
+  "lastName": "López",
+  "licenceNumber": "MP-5678"
+}
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "mipassword"
+}
+
+### GET sin token (debería fallar)
+GET http://localhost:8080/api/veterinarians
+
+### GET con token (copiá el token del login)
+GET http://localhost:8080/api/veterinarians
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDA3NDA1NX0.vXumQZ9cbe7UavGF4v1jjVc-8yGJQ6j8Eg8ygAXp9mA
+
+### Mi perfil (con token)
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDA3NDA1NX0.vXumQZ9cbe7UavGF4v1jjVc-8yGJQ6j8Eg8ygAXp9mA
+
+### Crear mascota
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDA3NDA1NX0.vXumQZ9cbe7UavGF4v1jjVc-8yGJQ6j8Eg8ygAXp9mA
+
+### Crear mascota
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDEwMjUyNX0.-B-yRgcSLOMt0NrUwH98srVKxBU2g_SQhJD70bHJAHg
+
+{
+  "name": "Firulais",
+  "species": "Perro",
+  "breed": "Labrador",
+  "ownerName": "Juan Pérez",
+  "ownerPhone": "2936-401234",
+  "ownerEmail": "juan@mail.com"
+}
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "mipassword"
+}
+
+### Buscar mascota por código
+GET http://localhost:8080/api/pets/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDEwMjUyNX0.-B-yRgcSLOMt0NrUwH98srVKxBU2g_SQhJD70bHJAHg
+
+### Registrar visita
+POST http://localhost:8080/api/visits
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDEwMjUyNX0.-B-yRgcSLOMt0NrUwH98srVKxBU2g_SQhJD70bHJAHg
+
+
+{
+  "petCode": "FIR-5308",
+  "date": "2026-05-29",
+  "type": "Vacunación",
+  "notes": "Vacuna antirrábica aplicada"
+}
+
+### Historial de visitas de Firulais
+GET http://localhost:8080/api/visits/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDEwMjUyNX0.-B-yRgcSLOMt0NrUwH98srVKxBU2g_SQhJD70bHJAHg
+
+### Test: email vacío
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": "123456",
+  "firstName": "Test",
+  "lastName": "Test",
+  "licenseNumber": "MP-0001"
+}
+
+
+### Test: email duplicado
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "secret123",
+  "firstName": "Ana",
+  "lastName": "Lopez",
+  "licenseNumber": "MP-9999"
+}
+
+### Email sin formato válido
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "no-es-email",
+  "password": "secret123",
+  "firstName": "Test",
+  "lastName": "Test",
+  "licenseNumber": "MP-0001"
+}
+
+### Password muy corto
+POST http://localhost:8080/api/veterinarians/register
+Content-Type: application/json
+
+{
+  "email": "nuevo@vet.com",
+  "password": "12",
+  "firstName": "Test",
+  "lastName": "Test",
+  "licenseNumber": "MP-0002"
+}
+
+### Login con credenciales incorrectas
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "passwordIncorrecto"
+}
+
+### Mascota sin nombre
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+  "name": "",
+  "species": "Perro",
+  "ownerName": "Juan Pérez"
+}
+
+### Mascota inexistente
+GET http://localhost:8080/api/pets/XXX-0000
+Authorization: Bearer TU_TOKEN
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lopez@vet.com",
+  "password": "mipassword"
+}
+
+### Mascota sin nombre
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjQ0NH0.uQxU8m48GT5cL4kZbUAORyr9uX5kl1Zvi7YEKbf47Sk
+
+{
+  "name": "",
+  "species": "Perro",
+  "ownerName": "Juan Pérez"
+}
+
+### Mascota inexistente
+GET http://localhost:8080/api/pets/XXX-0000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjQ0NH0.uQxU8m48GT5cL4kZbUAORyr9uX5kl1Zvi7YEKbf47Sk
+
+### Visita sin fecha
+POST http://localhost:8080/api/visits
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+{
+  "petCode": "FIR-5308",
+  "date": "",
+  "type": "Vacunación"
+}
+
+### Visita con fecha mal formada
+POST http://localhost:8080/api/visits
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+{
+  "petCode": "FIR-5308",
+  "date": "29/05/2026",
+  "type": "Control"
+}
+
+### Editar nombre y raza de Firulais
+PATCH http://localhost:8080/api/pets/FIR-5308
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+{
+  "name": "Firulais Jr",
+  "breed": "Labrador Negro"
+}
+
+### Verificar
+GET http://localhost:8080/api/pets/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+### Borrar Firulais
+DELETE http://localhost:8080/api/pets/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+### Verificar que no aparece más
+GET http://localhost:8080/api/pets/FIR-5308
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug
+
+### Borrar mascota inexistente
+DELETE http://localhost:8080/api/pets/XXX-0000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtaW1hcy1hcHAiLCJpc3MiOiJtaW1hcy1iYWNrZW5kIiwiaWQiOjIsImVtYWlsIjoibG9wZXpAdmV0LmNvbSIsImV4cCI6MTc4MDM0NjgyNX0.slZ9I708qsT4g66KZ-vjHjSJ8hz_u9nIDVMpycdW8ug

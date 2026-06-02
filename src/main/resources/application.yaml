@@ -1,0 +1,23 @@
+ktor:
+  deployment:
+    port: 8080
+  application:
+    modules:
+      - com.ignaherner.plugins.DatabaseKt.configureDatabase
+      - com.ignaherner.plugins.HttpKt.configureHttp
+      - com.ignaherner.plugins.SerializationKt.configureSerialization
+      - com.ignaherner.plugins.SecurityKt.configureSecurity
+      - com.ignaherner.plugins.StatusPagesKt.configureStatusPages
+      - com.ignaherner.plugins.RoutingKt.configureRouting
+
+jwt:
+  secret: "mimas-super-secret-key-cambiar-en-produccion"
+  issuer: "mimas-backend"
+  audience: "mimas-app"
+  expiration: 3600000
+
+database:
+  url: "jdbc:postgresql://localhost:5432/mimas"
+  driver: "org.postgresql.Driver"
+  user: "postgres"
+  password: "postgres123"
