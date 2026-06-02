@@ -417,3 +417,17 @@ Authorization: Bearer {{tokenLopez}}
   "tipoVacuna": "TRIPLE_FELINA",
   "fechaAplicacion": "2026-06-02"
 }
+
+### Crear desparasitación
+POST http://localhost:8080/api/dewormings
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "producto": "Drontal Plus",
+  "tipo": "INTERNA",
+  "fechaAplicacion": "2026-06-02",
+  "frecuencia": "TRIMESTRAL",
+  "proximaDosis": "2026-09-02"
+}
