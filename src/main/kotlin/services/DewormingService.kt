@@ -6,6 +6,7 @@ import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.DewormingResponse
 import com.ignaherner.repositories.DewormingRepository
 import com.ignaherner.repositories.PetRepository
+import com.ignaherner.validators.CommonValidators
 
 class DewormingService {
 
@@ -72,30 +73,25 @@ class DewormingService {
     }
 
     private fun validateCreate(producto: String, tipo: String, fechaAplicacion: String, proximaDosis: String?) {
-        if (producto.isBlank()) throw ValidationException("El producto es obligatorio")
-        if (tipo.isBlank()) throw ValidationException("El tipo es obligatorio")
-        if (fechaAplicacion.isBlank()) throw ValidationException("La fecha de aplicación es obligatoria")
-        validateDateFormat(fechaAplicacion, "fecha de aplicación")
+        CommonValidators.validateNotBlank(producto, "El producto")
+        CommonValidators.validateNotBlank(tipo, "El tipo")
+        CommonValidators.validateNotBlank(fechaAplicacion, "La fecha de aplicación")
+        CommonValidators.validateDateFormat(fechaAplicacion, "fecha de aplicación")
         if (proximaDosis != null && proximaDosis.isNotBlank()) {
-            validateDateFormat(proximaDosis, "próxima dosis")
+            CommonValidators.validateDateFormat(proximaDosis, "próxima dosis")
         }
     }
 
     private fun validateUpdate(producto: String?, tipo: String?, fechaAplicacion: String?, proximaDosis: String?) {
-        if (producto != null && producto.isBlank()) throw ValidationException("El producto no puede estar vacío")
-        if (tipo != null && tipo.isBlank()) throw ValidationException("El tipo no puede estar vacío")
+        CommonValidators.validateNotBlankIfPresent(producto, "El producto")
+        CommonValidators.validateNotBlankIfPresent(tipo, "El tipo")
         if (fechaAplicacion != null) {
-            if (fechaAplicacion.isBlank()) throw ValidationException("La fecha de aplicación no puede estar vacía")
-            validateDateFormat(fechaAplicacion, "fecha de aplicación")
+            CommonValidators.validateNotBlankIfPresent(fechaAplicacion, "La fecha de aplicación")
+            CommonValidators.validateDateFormat(fechaAplicacion, "fecha de aplicación")
         }
         if (proximaDosis != null && proximaDosis.isNotBlank()) {
-            validateDateFormat(proximaDosis, "próxima dosis")
+            CommonValidators.validateDateFormat(proximaDosis, "próxima dosis")
         }
     }
 
-    private fun validateDateFormat(date: String, fieldName: String) {
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            throw ValidationException("La $fieldName debe tener formato YYYY-MM-DD")
-        }
-    }
 }

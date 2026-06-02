@@ -6,6 +6,7 @@ import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.MedicationResponse
 import com.ignaherner.repositories.MedicationRepository
 import com.ignaherner.repositories.PetRepository
+import com.ignaherner.validators.CommonValidators
 
 class MedicationService {
 
@@ -74,40 +75,29 @@ class MedicationService {
     }
 
     private fun validateCreate(nombre: String, dosisCantidad: String, dosisUnidad: String, viaAdministracion: String, fechaInicio: String, horaInicio: String?) {
-        if (nombre.isBlank()) throw ValidationException("El nombre del medicamento es obligatorio")
-        if (dosisCantidad.isBlank()) throw ValidationException("La cantidad de dosis es obligatoria")
-        if (dosisUnidad.isBlank()) throw ValidationException("La unidad de dosis es obligatoria")
-        if (viaAdministracion.isBlank()) throw ValidationException("La vía de administración es obligatoria")
-        if (fechaInicio.isBlank()) throw ValidationException("La fecha de inicio es obligatoria")
-        validateDateFormat(fechaInicio, "fecha de inicio")
-        if (horaInicio != null && horaInicio.isNotBlank()) {
-            validateTimeFormat(horaInicio)
+        CommonValidators.validateNotBlank(nombre, "El nombre del medicamento")
+        CommonValidators.validateNotBlank(dosisCantidad, "La cantidad de dosis")
+        CommonValidators.validateNotBlank(dosisUnidad, "La unidad de dosis")
+        CommonValidators.validateNotBlank(viaAdministracion, "La vía de administración")
+        CommonValidators.validateNotBlank(fechaInicio, "La fecha de inicio")
+        CommonValidators.validateDateFormat(fechaInicio, "fecha de inicio")
+        if (!horaInicio.isNullOrBlank()) {
+            CommonValidators.validateTimeFormat(horaInicio, "hora de inicio")
         }
     }
 
     private fun validateUpdate(nombre: String?, dosisCantidad: String?, dosisUnidad: String?, viaAdministracion: String?, fechaInicio: String?, horaInicio: String?) {
-        if (nombre != null && nombre.isBlank()) throw ValidationException("El nombre no puede estar vacío")
-        if (dosisCantidad != null && dosisCantidad.isBlank()) throw ValidationException("La cantidad de dosis no puede estar vacía")
-        if (dosisUnidad != null && dosisUnidad.isBlank()) throw ValidationException("La unidad de dosis no puede estar vacía")
-        if (viaAdministracion != null && viaAdministracion.isBlank()) throw ValidationException("La vía de administración no puede estar vacía")
+        CommonValidators.validateNotBlankIfPresent(nombre, "El nombre")
+        CommonValidators.validateNotBlankIfPresent(dosisCantidad, "La cantidad de dosis")
+        CommonValidators.validateNotBlankIfPresent(dosisUnidad, "La unidad de dosis")
+        CommonValidators.validateNotBlankIfPresent(viaAdministracion, "La vía de administración")
         if (fechaInicio != null) {
-            if (fechaInicio.isBlank()) throw ValidationException("La fecha de inicio no puede estar vacía")
-            validateDateFormat(fechaInicio, "fecha de inicio")
+            CommonValidators.validateNotBlankIfPresent(fechaInicio, "La fecha de inicio")
+            CommonValidators.validateDateFormat(fechaInicio, "fecha de inicio")
         }
         if (horaInicio != null && horaInicio.isNotBlank()) {
-            validateTimeFormat(horaInicio)
+            CommonValidators.validateTimeFormat(horaInicio, "hora de inicio")
         }
     }
 
-    private fun validateDateFormat(date: String, fieldName: String) {
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            throw ValidationException("La $fieldName debe tener formato YYYY-MM-DD")
-        }
-    }
-
-    private fun validateTimeFormat(time: String) {
-        if (!time.matches(Regex("\\d{2}:\\d{2}"))) {
-            throw ValidationException("La hora de inicio debe tener formato HH:MM")
-        }
-    }
 }

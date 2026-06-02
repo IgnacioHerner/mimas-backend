@@ -1,5 +1,6 @@
 package com.ignaherner.routes
 
+import com.ignaherner.extensions.vetId
 import com.ignaherner.models.dto.CreateMedicationRequest
 import com.ignaherner.models.dto.UpdateMedicationRequest
 import com.ignaherner.services.MedicationService
@@ -17,13 +18,11 @@ fun Route.medicationRoutes() {
         route("/api/medications") {
 
             post {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val request = call.receive<CreateMedicationRequest>()
 
                 val medication = service.create(
                     petCode = request.petCode,
-                    veterinarianId = vetId,
+                    veterinarianId = call.vetId(),
                     nombre = request.nombre,
                     dosisCantidad = request.dosisCantidad,
                     dosisUnidad = request.dosisUnidad,
@@ -44,14 +43,12 @@ fun Route.medicationRoutes() {
             }
 
             patch("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
                 val request = call.receive<UpdateMedicationRequest>()
 
                 val medication = service.update(
                     id = id,
-                    requestingVetId = vetId,
+                    requestingVetId = call.vetId(),
                     nombre = request.nombre,
                     dosisCantidad = request.dosisCantidad,
                     dosisUnidad = request.dosisUnidad,
@@ -66,11 +63,8 @@ fun Route.medicationRoutes() {
             }
 
             delete("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
-
-                service.delete(id, vetId)
+                service.delete(id, call.vetId())
                 call.respond(HttpStatusCode.NoContent)
             }
         }

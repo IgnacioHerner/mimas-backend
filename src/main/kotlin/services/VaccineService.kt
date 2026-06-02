@@ -6,6 +6,7 @@ import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.VaccineResponse
 import com.ignaherner.repositories.PetRepository
 import com.ignaherner.repositories.VaccineRepository
+import com.ignaherner.validators.CommonValidators
 import com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date
 
 class VaccineService {
@@ -71,31 +72,23 @@ class VaccineService {
         }
     }
 
-    private fun validateUpdate(tipoVacuna: String?, fechaAplicacion: String?, proximaDosis: String?) {
-        if (tipoVacuna != null && tipoVacuna.isBlank()) {
-            throw ValidationException("El tipo de vacuna no puede estar vacío")
-        }
-        if (fechaAplicacion != null) {
-            if (fechaAplicacion.isBlank()) throw ValidationException("La fecha de aplicación no puede estar vacía")
-            validateDateFormat(fechaAplicacion, "fecha de aplicación")
-        }
-        if (proximaDosis != null && proximaDosis.isNotBlank()) {
-            validateDateFormat(proximaDosis, "próxima dosis")
-        }
-    }
-
     private fun validateCreate(tipoVacuna: String, fechaAplicacion: String, proximaDosis: String?) {
-        if (tipoVacuna.isBlank()) throw ValidationException("El tipo de vacuna es obligatorio")
-        if (fechaAplicacion.isBlank()) throw ValidationException("La fecha de aplicación es obligatoria")
-        validateDateFormat(fechaAplicacion, "fecha de aplicación")
-        if (proximaDosis != null && proximaDosis.isNotBlank()) {
-            validateDateFormat(proximaDosis, "próxima dosis")
+        CommonValidators.validateNotBlank(tipoVacuna, "El tipo de vacuna")
+        CommonValidators.validateNotBlank(fechaAplicacion, "La fecha de aplicación")
+        CommonValidators.validateDateFormat(fechaAplicacion, "fecha de aplicación")
+        if (!proximaDosis.isNullOrBlank()) {
+            CommonValidators.validateDateFormat(proximaDosis, "próxima dosis")
         }
     }
 
-    private fun validateDateFormat(date: String, fieldName: String) {
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            throw ValidationException("La $fieldName debe tener formato YYYY-MM-DD")
+    private fun validateUpdate(tipoVacuna: String?, fechaAplicacion: String?, proximaDosis: String?) {
+        CommonValidators.validateNotBlankIfPresent(tipoVacuna, "El tipo de vacuna")
+        if (fechaAplicacion != null) {
+            CommonValidators.validateNotBlankIfPresent(fechaAplicacion, "La fecha de aplicación")
+            CommonValidators.validateDateFormat(fechaAplicacion, "fecha de aplicación")
+        }
+        if (!proximaDosis.isNullOrBlank()) {
+            CommonValidators.validateDateFormat(proximaDosis, "próxima dosis")
         }
     }
 

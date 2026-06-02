@@ -2,22 +2,21 @@ package com.ignaherner.services
 
 import com.ignaherner.exceptions.NotFoundException
 import com.ignaherner.exceptions.UnauthorizedException
-import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.ConditionResponse
 import com.ignaherner.repositories.ConditionRepository
 import com.ignaherner.repositories.PetRepository
+import com.ignaherner.validators.CommonValidators
 
 class ConditionService {
 
     private val conditionRepository = ConditionRepository()
     private val petRepository = PetRepository()
 
-
     fun create(petCode: String, veterinarianId: Int, nombre: String, fechaDiagnostico: String, severidad: String, estado: String, notas: String?): ConditionResponse {
         validateCreate(nombre, fechaDiagnostico, severidad, estado)
 
         val pet = petRepository.findByCode(petCode)
-            ?: throw NotFoundException("Mascota con codigo '$petCode'")
+            ?: throw NotFoundException("Mascota con código '$petCode'")
 
         val conditionId = conditionRepository.create(
             petId = pet.id,
@@ -32,9 +31,10 @@ class ConditionService {
         return conditionRepository.findById(conditionId)!!
     }
 
-    fun getByPetId(petCode: String) : List<ConditionResponse> {
+    fun getByPetCode(petCode: String): List<ConditionResponse> {
         val pet = petRepository.findByCode(petCode)
-            ?: throw NotFoundException("Mascota con codigo '$petCode'")
+            ?: throw NotFoundException("Mascota con código '$petCode'")
+
         return conditionRepository.findByPetId(pet.id)
     }
 
@@ -42,13 +42,13 @@ class ConditionService {
         validateUpdate(nombre, fechaDiagnostico, severidad, estado)
 
         val ownerVetId = conditionRepository.findOwnerVetId(id)
-            ?: throw NotFoundException("Condicion con id '$id'")
+            ?: throw NotFoundException("Condición con id '$id'")
 
         if (ownerVetId != requestingVetId) {
             throw UnauthorizedException("Solo el veterinario que creó la condición puede modificarla")
         }
 
-        val updated = conditionRepository.update(id, nombre, fechaDiagnostico, severidad, estado, null)
+        val updated = conditionRepository.update(id, nombre, fechaDiagnostico, severidad, estado, notas)
         if (!updated) {
             throw NotFoundException("Condición con id '$id'")
         }
@@ -70,29 +70,21 @@ class ConditionService {
         }
     }
 
-
     private fun validateCreate(nombre: String, fechaDiagnostico: String, severidad: String, estado: String) {
-        if (nombre.isBlank()) throw ValidationException("El nombre de la condición es obligatorio")
-        if (fechaDiagnostico.isBlank()) throw ValidationException("La fecha de diagnóstico es obligatoria")
-        validateDateFormat(fechaDiagnostico, "fecha de diagnóstico")
-        if (severidad.isBlank()) throw ValidationException("La severidad es obligatoria")
-        if (estado.isBlank()) throw ValidationException("El estado es obligatorio")
+        CommonValidators.validateNotBlank(nombre, "El nombre de la condición")
+        CommonValidators.validateNotBlank(fechaDiagnostico, "La fecha de diagnóstico")
+        CommonValidators.validateDateFormat(fechaDiagnostico, "fecha de diagnóstico")
+        CommonValidators.validateNotBlank(severidad, "La severidad")
+        CommonValidators.validateNotBlank(estado, "El estado")
     }
 
     private fun validateUpdate(nombre: String?, fechaDiagnostico: String?, severidad: String?, estado: String?) {
-        if (nombre != null && nombre.isBlank()) throw ValidationException("El nombre no puede estar vacío")
+        CommonValidators.validateNotBlankIfPresent(nombre, "El nombre")
         if (fechaDiagnostico != null) {
-            if (fechaDiagnostico.isBlank()) throw ValidationException("La fecha de diagnóstico no puede estar vacía")
-            validateDateFormat(fechaDiagnostico, "fecha de diagnóstico")
+            CommonValidators.validateNotBlankIfPresent(fechaDiagnostico, "La fecha de diagnóstico")
+            CommonValidators.validateDateFormat(fechaDiagnostico, "fecha de diagnóstico")
         }
-        if (severidad != null && severidad.isBlank()) throw ValidationException("La severidad no puede estar vacía")
-        if (estado != null && estado.isBlank()) throw ValidationException("El estado no puede estar vacío")
-    }
-
-
-    private fun validateDateFormat(date: String, fieldName: String) {
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            throw ValidationException("La $fieldName debe tener formato YYYY-MM-DD")
-        }
+        CommonValidators.validateNotBlankIfPresent(severidad, "La severidad")
+        CommonValidators.validateNotBlankIfPresent(estado, "El estado")
     }
 }

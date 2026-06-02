@@ -1,5 +1,6 @@
 package com.ignaherner.routes
 
+import com.ignaherner.extensions.vetId
 import com.ignaherner.models.dto.CreateWeightRequest
 import com.ignaherner.models.dto.UpdateWeightRequest
 import com.ignaherner.services.WeightService
@@ -15,15 +16,12 @@ fun Route.weightRoutes() {
 
     authenticate("auth-jwt") {
         route("/api/weights") {
-
             post {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val request = call.receive<CreateWeightRequest>()
 
                 val weight = service.create(
                     petCode = request.petCode,
-                    veterinarianId = vetId,
+                    veterinarianId = call.vetId(),
                     peso = request.peso,
                     fecha = request.fecha,
                     notas = request.notas
@@ -39,14 +37,12 @@ fun Route.weightRoutes() {
             }
 
             patch("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
                 val request = call.receive<UpdateWeightRequest>()
 
                 val weight = service.update(
                     id = id,
-                    requestingVetId = vetId,
+                    requestingVetId = call.vetId(),
                     peso = request.peso,
                     fecha = request.fecha,
                     notas = request.notas
@@ -56,11 +52,8 @@ fun Route.weightRoutes() {
             }
 
             delete("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
-
-                service.delete(id, vetId)
+                service.delete(id, call.vetId())
                 call.respond(HttpStatusCode.NoContent)
             }
         }

@@ -6,6 +6,7 @@ import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.WeightResponse
 import com.ignaherner.repositories.PetRepository
 import com.ignaherner.repositories.WeightRepository
+import com.ignaherner.validators.CommonValidators
 import java.math.BigDecimal
 
 class WeightService {
@@ -70,20 +71,20 @@ class WeightService {
     }
 
     private fun validateCreate(peso: String, fecha: String) {
-        if (peso.isBlank()) throw ValidationException("El peso es obligatorio")
+        CommonValidators.validateNotBlank(peso, "El peso")
         validateWeight(peso)
-        if (fecha.isBlank()) throw ValidationException("La fecha es obligatoria")
-        validateDateFormat(fecha)
+        CommonValidators.validateNotBlank(fecha, "La fecha")
+        CommonValidators.validateDateFormat(fecha, "fecha")
     }
 
     private fun validateUpdate(peso: String?, fecha: String?) {
         if (peso != null) {
-            if (peso.isBlank()) throw ValidationException("El peso no puede estar vacío")
+            CommonValidators.validateNotBlankIfPresent(peso, "El peso")
             validateWeight(peso)
         }
         if (fecha != null) {
-            if (fecha.isBlank()) throw ValidationException("La fecha no puede estar vacía")
-            validateDateFormat(fecha)
+            CommonValidators.validateNotBlankIfPresent(fecha, "La fecha")
+            CommonValidators.validateDateFormat(fecha, "fecha")
         }
     }
 
@@ -98,12 +99,6 @@ class WeightService {
         }
         if (pesoDecimal > BigDecimal("999.99")) {
             throw ValidationException("El peso no puede superar 999.99 kg")
-        }
-    }
-
-    private fun validateDateFormat(date: String) {
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            throw ValidationException("La fecha debe tener formato YYYY-MM-DD")
         }
     }
 }

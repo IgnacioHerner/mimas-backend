@@ -1,5 +1,6 @@
 package com.ignaherner.routes
 
+import com.ignaherner.extensions.vetId
 import com.ignaherner.models.dto.CreateDewormingRequest
 import com.ignaherner.models.dto.UpdateDewormingRequest
 import com.ignaherner.services.DewormingService
@@ -17,13 +18,11 @@ fun Route.dewormingRoutes() {
         route("/api/dewormings") {
 
             post {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val request = call.receive<CreateDewormingRequest>()
 
                 val deworming = service.create(
                     petCode = request.petCode,
-                    veterinarianId = vetId,
+                    veterinarianId = call.vetId(),
                     producto = request.producto,
                     tipo = request.tipo,
                     fechaAplicacion = request.fechaAplicacion,
@@ -42,14 +41,12 @@ fun Route.dewormingRoutes() {
             }
 
             patch("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
                 val request = call.receive<UpdateDewormingRequest>()
 
                 val deworming = service.update(
                     id = id,
-                    requestingVetId = vetId,
+                    requestingVetId = call.vetId(),
                     producto = request.producto,
                     tipo = request.tipo,
                     fechaAplicacion = request.fechaAplicacion,
@@ -62,11 +59,8 @@ fun Route.dewormingRoutes() {
             }
 
             delete("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
-
-                service.delete(id, vetId)
+                service.delete(id, call.vetId())
                 call.respond(HttpStatusCode.NoContent)
             }
         }

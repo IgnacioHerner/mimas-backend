@@ -5,13 +5,12 @@ import com.ignaherner.models.dto.VeterinarianResponse
 import com.ignaherner.services.JwtService
 import com.ignaherner.services.PasswordService
 import com.ignaherner.services.VeterinarianService
-import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
 import com.ignaherner.exceptions.NotFoundException
+import com.ignaherner.extensions.vetEmail
 import io.ktor.server.request.receive
-import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -51,10 +50,7 @@ fun Route.authRoutes(jwtService: JwtService) {
 
         authenticate("auth-jwt") {
             get("/me") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val email = principal.payload.getClaim("email").asString()
-
-                val vet = veterinarianService.findByEmail(email)
+                val vet = veterinarianService.findByEmail(call.vetEmail())
                     ?: throw NotFoundException("Veterinario")
 
                 call.respond(VeterinarianResponse(

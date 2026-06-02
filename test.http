@@ -496,3 +496,50 @@ Authorization: Bearer {{tokenLopez}}
   "peso": "abc",
   "fecha": "2026-06-02"
 }
+
+### Crear vacuna sin tipoVacuna (debería dar error de validación)
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "",
+  "fechaAplicacion": "2026-06-02"
+}
+
+### Mandar solo tipoVacuna vacío pero fecha correcta
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "",
+  "fechaAplicacion": "2026-06-02"
+}
+
+### Sin mandar tipoVacuna
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "fechaAplicacion": "2026-06-02"
+}
+
+### Crear vacuna
+POST http://localhost:8080/api/vaccines
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "tipoVacuna": "TRIPLE",
+  "fechaAplicacion": "2026-06-02"
+}
+
+### Mi perfil
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer {{tokenLopez}}

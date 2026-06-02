@@ -1,5 +1,6 @@
 package com.ignaherner.routes
 
+import com.ignaherner.extensions.vetId
 import com.ignaherner.models.dto.CreateVaccineRequest
 import com.ignaherner.models.dto.UpdateVaccineRequest
 import com.ignaherner.services.VaccineService
@@ -22,13 +23,11 @@ fun Route.vaccineRoutes() {
     authenticate("auth-jwt") {
         route("/api/vaccines") {
             post {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val request = call.receive<CreateVaccineRequest>()
 
                 val vaccine = service.create(
                     petCode = request.petCode,
-                    veterinarianId = vetId,
+                    veterinarianId = call.vetId(),
                     tipoVacuna = request.tipoVacuna,
                     nombreComercial = request.nombreComercial,
                     fechaAplicacion = request.fechaAplicacion,
@@ -47,14 +46,12 @@ fun Route.vaccineRoutes() {
             }
 
             patch ("/{id}"){
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
                 val request = call.receive<UpdateVaccineRequest>()
 
                 val vaccine = service.update(
                     id = id,
-                    requestingVetId = vetId,
+                    requestingVetId = call.vetId(),
                     tipoVacuna = request.tipoVacuna,
                     nombreComercial = request.nombreComercial,
                     fechaAplicacion = request.fechaAplicacion,
@@ -67,11 +64,8 @@ fun Route.vaccineRoutes() {
             }
 
             delete ("/{id}"){
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
-
-                service.delete(id, vetId)
+                service.delete(id, call.vetId())
                 call.respond(HttpStatusCode.NoContent)
             }
         }

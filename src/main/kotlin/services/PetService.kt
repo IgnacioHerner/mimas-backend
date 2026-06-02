@@ -3,6 +3,7 @@ package com.ignaherner.services
 import com.ignaherner.exceptions.ValidationException
 import com.ignaherner.models.dto.PetResponse
 import com.ignaherner.repositories.PetRepository
+import com.ignaherner.validators.CommonValidators
 
 class PetService {
 
@@ -42,10 +43,18 @@ class PetService {
     }
 
     private fun validateCreate(name: String, species: String, ownerName: String) {
-        if (name.isBlank()) throw ValidationException("El nombre de la mascota es obligatorio")
+        CommonValidators.validateNotBlank(name, "El nombre de la mascota")
         if (name.length < 2) throw ValidationException("El nombre de la mascota debe tener al menos 2 caracteres")
-        if (species.isBlank()) throw ValidationException("La especie es obligatoria")
-        if (ownerName.isBlank()) throw ValidationException("El nombre del dueño es obligatorio")
+        CommonValidators.validateNotBlank(species, "La especie")
+        CommonValidators.validateNotBlank(ownerName, "El nombre del dueño")
+    }
+
+    private fun validateUpdate(name: String?, species: String?) {
+        if (name != null) {
+            CommonValidators.validateNotBlankIfPresent(name, "El nombre")
+            if (name.length < 2) throw ValidationException("El nombre debe tener al menos 2 caracteres")
+        }
+        CommonValidators.validateNotBlankIfPresent(species, "La especie")
     }
 
     private fun generateUniqueCode(name: String): String {
@@ -55,11 +64,4 @@ class PetService {
         }
         return code
     }
-
-    private fun validateUpdate(name: String?, species: String?) {
-        if (name != null && name.isBlank()) throw ValidationException("El nombre no puede estar vacío")
-        if (name != null && name.length < 2) throw ValidationException("El nombre debe tener al menos 2 caracteres")
-        if (species != null && species.isBlank()) throw ValidationException("La especie no puede estar vacía")
-    }
-
 }

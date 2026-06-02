@@ -1,5 +1,6 @@
 package com.ignaherner.routes
 
+import com.ignaherner.extensions.vetId
 import com.ignaherner.models.dto.CreateConditionRequest
 import com.ignaherner.models.dto.UpdateConditionRequest
 import com.ignaherner.services.ConditionService
@@ -23,13 +24,11 @@ fun Route.conditionRoutes() {
     authenticate("auth-jwt") {
         route("/api/conditions"){
             post {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val request = call.receive<CreateConditionRequest>()
 
                 val condition = service.create(
                     petCode = request.petCode,
-                    veterinarianId = vetId,
+                    veterinarianId = call.vetId(),
                     nombre = request.nombre,
                     fechaDiagnostico = request.fechaDiagnostico,
                     severidad = request.severidad,
@@ -42,19 +41,17 @@ fun Route.conditionRoutes() {
 
             get("/pet/{petCode}") {
                 val petCode = call.parameters["petCode"]!!
-                val conditions = service.getByPetId(petCode)
+                val conditions = service.getByPetCode(petCode)
                 call.respond(conditions)
             }
 
             patch("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
                 val request = call.receive<UpdateConditionRequest>()
 
                 val condition = service.update(
                     id = id,
-                    requestingVetId = vetId,
+                    requestingVetId = call.vetId(),
                     nombre = request.nombre,
                     fechaDiagnostico = request.fechaDiagnostico,
                     severidad = request.severidad,
@@ -65,11 +62,8 @@ fun Route.conditionRoutes() {
             }
 
             delete("/{id}") {
-                val principal = call.principal<JWTPrincipal>()!!
-                val vetId = principal.payload.getClaim("id").asInt()
                 val id = call.parameters["id"]!!.toInt()
-
-                service.delete(id, vetId)
+                service.delete(id, call.vetId())
                 call.respond(HttpStatusCode.NoContent)
             }
         }
