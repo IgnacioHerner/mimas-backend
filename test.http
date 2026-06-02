@@ -462,3 +462,37 @@ Authorization: Bearer {{tokenLopez}}
   "estado": "EN_TRATAMIENTO",
   "notas": "Aplicar shampoo medicado 2 veces por semana"
 }
+
+### Crear registro de peso
+POST http://localhost:8080/api/weights
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "peso": "28.5",
+  "fecha": "2026-06-02",
+  "notas": "Control de rutina"
+}
+
+### Probar validación: peso negativo
+POST http://localhost:8080/api/weights
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "peso": "-5",
+  "fecha": "2026-06-02"
+}
+
+### Probar validación: peso no numérico
+POST http://localhost:8080/api/weights
+Content-Type: application/json
+Authorization: Bearer {{tokenLopez}}
+
+{
+  "petCode": "FIR-5308",
+  "peso": "abc",
+  "fecha": "2026-06-02"
+}

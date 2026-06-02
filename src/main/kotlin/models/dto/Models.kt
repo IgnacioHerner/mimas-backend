@@ -215,3 +215,30 @@ data class ConditionResponse(
     val estado: String,
     val notas: String? = null
 )
+
+@Serializable
+data class CreateWeightRequest(
+    val petCode: String,
+    val peso: String,
+    val fecha: String,
+    val notas: String? = null
+)
+
+@Serializable
+data class UpdateWeightRequest(
+    val peso: String? = null,
+    val fecha: String? = null,
+    val notas: String? = null
+)
+
+@Serializable
+data class WeightResponse(
+    val id: Int,
+    val petId: Int,
+    val petCode: String,
+    val veterinarianId: Int,
+    val veterinarianName: String,
+    val peso: String,
+    val fecha: String,
+    val notas: String? = null
+)

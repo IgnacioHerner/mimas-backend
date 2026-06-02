@@ -8,6 +8,7 @@ import com.ignaherner.routes.medicationRoutes
 import com.ignaherner.routes.petRoutes
 import com.ignaherner.routes.vaccineRoutes
 import com.ignaherner.routes.veterinarianRoutes
+import com.ignaherner.routes.weightRoutes
 import com.ignaherner.services.JwtService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -37,5 +38,6 @@ fun Application.configureRouting() {
         dewormingRoutes()
         medicationRoutes()
         conditionRoutes()
+        weightRoutes()
     }
 }

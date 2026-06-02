@@ -7,6 +7,7 @@ import com.ignaherner.models.tables.PetOwners
 import com.ignaherner.models.tables.Pets
 import com.ignaherner.models.tables.Vaccines
 import com.ignaherner.models.tables.Veterinarians
+import com.ignaherner.models.tables.Weights
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
@@ -19,7 +20,7 @@ object DatabaseFactory {
         Database.connect(createHikariDataSource(url, driver, user, password))
 
         transaction {
-            SchemaUtils.create(Veterinarians, Pets, PetOwners, Vaccines, Dewormings, Medications, Conditions)
+            SchemaUtils.create(Veterinarians, Pets, PetOwners, Vaccines, Dewormings, Medications, Conditions, Weights)
         }
     }
 
